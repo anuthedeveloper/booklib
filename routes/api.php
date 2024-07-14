@@ -23,7 +23,7 @@ use App\Http\Controllers\BookController;
 // });
 
 // Group routes that require authentication
-Route::group(['middleware' => 'auth:api'], function () {
+// Route::group(['middleware' => 'auth:api'], function () {
     Route::get('books', [BookController::class, 'index']);
     Route::post('books', [BookController::class, 'store']);
     Route::get('books/{id}', [BookController::class, 'show']);
@@ -35,4 +35,4 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('authors/{id}', [AuthorController::class, 'show']);
     Route::put('authors/{id}', [AuthorController::class, 'update']);
     Route::delete('authors/{id}', [AuthorController::class, 'destroy']);
-});
+// });
