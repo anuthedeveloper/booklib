@@ -6,19 +6,24 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+
+// Routes
+
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
 // Authentication route
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+// Route::group(['prefix' => 'auth'], function () {
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    // 
+    Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+// });
 
 // Group routes that require authentication
-Route::middleware('auth:api')->group(function () {
-    // Route::resource('books', BookController::class);
-    // Route::resource('authors', AuthorController::class);
-
+Route::group(['middleware' => 'auth:api'], function () {
     Route::get('books', [BookController::class, 'index']);
     Route::post('books', [BookController::class, 'store']);
     Route::get('books/{id}', [BookController::class, 'show']);

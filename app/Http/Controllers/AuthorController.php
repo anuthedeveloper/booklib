@@ -4,25 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class AuthorController extends Controller
 {
-    //
+    // API Methods
+
     public function index()
     {
-        return Author::with('books')->get();
+        $authors = Author::with('books')->paginate(10);
+
+        return response()->json($authors);
     }
 
     public function store(Request $request)
     {
-        $this->validateRequest($request);
+        try {
+            $this->validateRequest($request);
 
-        $author = Author::create($request->all());
+            $author = Author::create($request->all());
 
-        return response()->json([
-            'message' => 'Author created successfully.',
-            'data' => $author,
-        ], 201);
+            return response()->json([
+                'message' => 'Author created successfully.',
+                'data' => $author,
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function show($id)
@@ -34,16 +42,20 @@ class AuthorController extends Controller
 
     public function update(Request $request, $id)
     {
-        $author = Author::findOrFail($id);
+        try {
+            $author = Author::findOrFail($id);
 
-        $this->validateRequest($request);
+            $this->validateRequest($request);
 
-        $author->update($request->all());
+            $author->update($request->all());
 
-        return response()->json([
-            'message' => 'Author updated successfully.',
-            'data' => $author,
-        ]);
+            return response()->json([
+                'message' => 'Author updated successfully.',
+                'data' => $author,
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function destroy($id)
@@ -54,6 +66,39 @@ class AuthorController extends Controller
         return response()->json(['message' => 'Author deleted successfully']);
     }
 
+    // Web Views Methods
+
+    public function indexView(Request $request)
+    {
+        $query = $request->input('query');
+        $authors = Author::with('books')
+                        ->where('name', 'like', '%'.$query.'%')
+                        ->orWhere('biography', 'like', '%'.$query.'%')
+                        ->paginate(10);
+
+        return view('authors.index', compact('authors'));
+    }
+
+    public function create()
+    {
+        return view('authors.create');
+    }
+
+    public function showView($id)
+    {
+        $author = Author::with('books')->findOrFail($id);
+
+        return view('authors.show', compact('author'));
+    }
+
+    public function edit($id)
+    {
+        $author = Author::findOrFail($id);
+
+        return view('authors.edit', compact('author'));
+    }
+
+    // Validation Method
 
     private function validateRequest(Request $request)
     {

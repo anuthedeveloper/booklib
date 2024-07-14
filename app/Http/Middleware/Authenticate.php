@@ -26,8 +26,12 @@ class Authenticate
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ?string $guard = null): Response
     {
+        if (Auth::guard($guard)->guest()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         return $next($request);
     }
 }

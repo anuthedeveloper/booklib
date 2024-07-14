@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('isbn')->unique();
             $table->text('summary');
             $table->string('cover_image');
+            $table->string('thumbnail');
             $table->timestamps();
         });
     }
