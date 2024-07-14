@@ -17,7 +17,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
     // show pages
     Route::get('/books', [BookController::class, 'indexView'])->name('books.index');
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
@@ -34,4 +34,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/authors/edit/{id}', [AuthorController::class, 'edit'])->name('authors.edit');
     Route::put('/authors/{id}', [AuthorController::class, 'update'])->name('authors.update');
     Route::delete('/authors/{id}', [AuthorController::class, 'destroy'])->name('authors.destroy');
-});
+// });

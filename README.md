@@ -47,10 +47,12 @@
 
 To use:
 
-Run: 'migrate' create the database and 'serve' starts the application
+Run: 'migrate' create the database and 'serve' starts the application\
+The seed generates the faker data
 
 ```
 php artisan migrate
+php aritan db:seed
 php artisan serve
 
 ```
