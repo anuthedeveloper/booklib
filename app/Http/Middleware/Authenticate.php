@@ -5,8 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
-class Authenticate
+class Authenticate extends Middleware
 {
     /**
      * Get the path the user should be redirected to when they are not authenticated.
@@ -28,10 +30,18 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next, ?string $guard = null): Response
     {
-        if (Auth::guard($guard)->guest()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ($this->auth->guard('web')->check()) {
+            Log::info('User is authenticated');
+        } else {
+            Log::info('User is not authenticated');
         }
 
-        return $next($request);
+        return parent::handle($request, $next, ...$guards);
+
+        // if (Auth::guard($guard)->guest()) {
+        //     return response()->json(['error' => 'Unauthorized'], 401);
+        // }
+
+        // return $next($request);
     }
 }

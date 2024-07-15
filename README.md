@@ -33,7 +33,7 @@
 
 #### User Authentication:
 
--   mplement basic login functionality.
+-   implement basic login functionality.
 
 #### Form Handling:
 

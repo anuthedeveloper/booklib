@@ -8,19 +8,14 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 
 // Routes
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
 // Authentication route
 // Route::group(['prefix' => 'auth'], function () {
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
-    // 
-    Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
-    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 // });
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+// 
+Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
 // Group routes that require authentication
 Route::group(['middleware' => 'auth:api'], function () {

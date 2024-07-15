@@ -31,7 +31,7 @@ class AuthController extends Controller
         ]);
 
         $token = JWTAuth::fromUser($user);
-
+        Auth::login($user);
         return response()->json(compact('user', 'token'), 201);
     }
 
@@ -39,10 +39,16 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if ($token = JWTAuth::attempt($credentials)) {
-            // $user = Auth::user();
-            // $token = JWTAuth::fromUser($user);
-            return response()->json(compact('token'));
+        if (Auth::attempt($credentials)) {
+            // Debug: Check if the user is authenticated after login
+            if (Auth::check()) {
+                // $token = JWTAuth::attempt($credentials);
+                $user = Auth::user();
+                $token = JWTAuth::fromUser($user);
+                return response()->json(compact('token'));
+            } else {
+                return response()->json(['error' => 'User authenticate failed!'], 401);
+            }
         }
 
         return response()->json(['error' => 'Invalid credentials'], 401);
@@ -61,10 +67,17 @@ class AuthController extends Controller
     public function logout()
     {
         try {
-            JWTAuth::invalidate(JWTAuth::getToken());
-            return response()->json(['message' => 'Successfully logged out']);
-            // return redirect('/');
+            if (Auth::check()) {
+                Auth::logout(); // For session-based logout
+                return redirect('/?logout=true');
+            } elseif (JWTAuth::parseToken()->authenticate()) {
+                JWTAuth::invalidate(JWTAuth::getToken()); // For JWT authentication logout
+                return response()->json(['message' => 'Successfully logged out']);            
+            } else {
+                return response()->json(['error' => 'User not authenticated'], 401);
+            }
         } catch (\Exception $e) {
+            \Log::error('Logout exception: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to logout, please try again'], 500);
         }
     }

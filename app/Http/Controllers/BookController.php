@@ -5,6 +5,7 @@ use App\Models\Book;
 use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -82,6 +83,10 @@ class BookController extends Controller
 
     public function home(Request $request)
     {
+        // $user = Auth::user();
+        // if (!auth()->check()) {
+        //     return redirect()->route('login')->with('error', 'You need to login first');
+        // }
         $books = $this->searchBooks($request);
         return view('home', compact('books'));
     }
