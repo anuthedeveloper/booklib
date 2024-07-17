@@ -63,4 +63,4 @@ jobs:
           app-name: 'booklib'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6C2BE28E91E542AD88EE62FE15EBB412 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F73FA85364274BCEABB8713FC126FA61 }}
