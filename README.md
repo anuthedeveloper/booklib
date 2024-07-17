@@ -81,8 +81,8 @@ Laravel uses migrations to set up database tables. Run the migrations:
 php artisan migrate
 ```
 
-Generate an JWT Secret Key:
-Generate an jwt secret, which is used for jwt authentication and authorization:
+Generate a JWT Secret Key:
+Generate a jwt secret, which is used for jwt authentication and authorization:
 
 ```
 php artisan jwt:secret
