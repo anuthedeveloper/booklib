@@ -81,6 +81,13 @@ Laravel uses migrations to set up database tables. Run the migrations:
 php artisan migrate
 ```
 
+Generate an JWT Secret Key:
+Generate an jwt secret, which is used for jwt authentication and authorization:
+
+```
+php artisan jwt:secret
+```
+
 Start the Development Server:
 Laravel provides a built-in development server:
 
